@@ -35,7 +35,7 @@ class Producto {
         })
     }
     obtenerProducto() {
-        productOptions.from('articulos').select('*')
+        productOptions('articulos').select('*')
         .then(rows=> rows)
         .catch((err) => {
             console.log(err) 

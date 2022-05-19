@@ -1,0 +1,52 @@
+<form onsubmit="return addProducto()">
+    <h1>Carga tu producto</h1>
+    <!-- <input type="text" placeholder="producto" id="producto">
+        <input type="text" placeholder="precio" id="precio">
+        <input type="submit" value="Enviar"> -->
+
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Producto</label>
+        <input type="text" placeholder="producto" id="producto">
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Precio</label>
+        <input type="text" placeholder="precio" id="precio">
+    </div>
+    <input type="submit" value="Enviar">
+
+
+</form>
+<!-- <div id="tablaProd"></div> -->
+<h1>Productos</h1>
+
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">Producto</th>
+            <th scope="col">Precio</th>
+        </tr>
+    <tbody id="tablaProd"></tbody>
+    </thead>
+</table>
+
+<!-- <form onsubmit="return addMensajes()">
+        <h1>Chat</h1>
+        <input type="text" placeholder="email" id="mail">
+        <input type="text" placeholder="msn" id="mensaje">
+        <input type="submit" value="Enviar">
+    </form>
+    <div id="chat"></div> -->
+
+<h1>Chat</h1>
+<form onsubmit="return addMensajes()">
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email</label>
+        <input type="text" placeholder="email" id="mail">
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Mensaje</label>
+        <input type="text" placeholder="msn" id="mensaje">
+    </div>
+    <input type="submit" value="Enviar">
+</form>
+<div id="chat"></div>
