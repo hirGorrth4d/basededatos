@@ -17,32 +17,36 @@ const messageApi = new Mensajes(chatOptions, 'messages')
 
 const productApi = new Producto('ecommerce', 'productos')
 
+listarProducto =(req,res) => {
+        let producto = productApi.obtenerProducto()
+        res.render('main', {lisprod: producto, listsExists: true})
+    }
 
 io.on("connection", (socket) =>{
     //productos
-    socket.emit("producto", productos)
+    socket.emit("producto", productApi)
     socket.on("producto_respuesta", (data) =>{
         console.log(data)
     })
     socket.on("dataProdCliente", (data) =>{
-        productos.push(data)
-        console.log(productos)
-        io.sockets.emit("producto", productos)
+        productApi.push(data)
+        console.log(productApi)
+        io.sockets.emit("producto", productApi)
     })
 
     //mensajes
     console.log("usuario conectado")
-    socket.emit("mensaje_chat", mensajes)
+    socket.emit("mensaje_chat", messageApi.getAll())
     socket.on("mensaje_respuesta", (data) =>{
         console.log(data)
     })
 
     socket.on("dataMensajesCliente",(data)=>{
         console.log(data)
-        mensajes.push(data)
-        console.log(mensajes)
+        messageApi.push(data)
+        console.log(messageApi)
         // socket.emit("mensaje_chat", mensajes)
-        io.sockets.emit("mensaje_chat", mensajes)
+        io.sockets.emit("mensaje_chat", messageApi)
     })
 })
 
@@ -59,9 +63,9 @@ app.use(express.static('public'))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
-app.get('/', productApi.listarProducto())
+app.get('/', listarProducto)
 
-app.get('/productos', productApi.agregarProducto())
+app.get('/productos', productApi.agregarProducto)
 
 
 server.listen(port, () =>{

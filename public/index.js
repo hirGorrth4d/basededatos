@@ -20,7 +20,7 @@ const renderMensajes = (data) =>{
     
     let html = data.map(x => {
         return `
-        <p><strong>${x.email}[${today.toUTCString()}]:</strong> ${x.msn}</p>
+        <p><strong>${x.name}[${today.toUTCString()}]:</strong> ${x.text}</p>
         `
     }).join(" ")
     document.querySelector("#chat").innerHTML = html
@@ -31,8 +31,8 @@ const renderMensajes = (data) =>{
 const renderProducto = (data) =>{
     let html = data.map(x =>{
         return `<tr>
-                    <td>${x.prod}</td>
-                    <td>${x.price}</td>
+                    <td>${x.name}</td>
+                    <td>${x.precio}</td>
                 </tr>`
     }).join(" ")
     document.querySelector("#tablaProd").innerHTML = html

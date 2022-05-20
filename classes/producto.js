@@ -1,4 +1,5 @@
 const { productOptions } = require('../options/options')
+const knex = require('knex')(productOptions)
 
 class Producto {
     constructor (db, table) {
@@ -27,21 +28,25 @@ class Producto {
         }
     }
     guardarProducto(producto) {
-        productOptions('articulos').insert(producto)
+        knex('articulos').insert(producto)
         .then(art => art)
         .catch ((err) => {
             console.log(err)
             throw err
+        }).finally(()=>{
+            knex.destroy()
         })
     }
     obtenerProducto() {
-        productOptions('articulos').select('*')
+        knex('articulos').select('*')
         .then(rows=> rows)
         .catch((err) => {
             console.log(err) 
             throw err
             }
-        )
+        ).finally(()=>{
+            knex.destroy()
+        })
     }
     agregarProducto = (req,res) => {
         let producto  = req.body
@@ -49,10 +54,7 @@ class Producto {
         console.log('producto agregado')
         res.redirect('/')
     }
-    listarProducto =(req,res) => {
-        let producto = this.obtenerProducto()
-        res.render('main', {lisprod: producto, listsExists: true})
-    }
+    
 }
 
 module.exports = Producto
