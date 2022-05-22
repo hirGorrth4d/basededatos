@@ -1,29 +1,41 @@
+const {chatOptions} = require('../options/options')
+const knex = require('knex')(chatOptions)
+
 class Mensajes {
-    constructor (db, table) {
-        this.save = (message) => {
-            db.schema.hasTable(table).then((exists) => {
-                if (!exists) {
-                    return db.schema.createTable(table, (t) => {
-                        t.increments('id').primary()
-                        t.string('name', 255)
-                        t.integer('date')
-                        t.string('text')
-                    })
-                }
+    async save(newData) {
+        try {
+            await knex('messages').insert({
+                email: newData.email,
+                message: newData.message,
+                date: newData.date,
             })
-            db(table)
-                .insert(message)
-                .then(()=>console.log('mensaje agregado'))
-                .catch((err) => {
-                    console.log(err)
-                    throw err
-                })
+        } catch (e) {
+            console.log(e)
         }
-        this.getAll = async () => {
-            const message = await db.from(table)
-            .select('*')
-            .then((rows)=> rows)
-            return message
+    }
+
+    async getById(id) {
+        try {
+            const msg = await knex('messages').where({id})
+            return msg
+        }catch (err) {
+            console.log(err)
+        }
+    }
+
+    async getAll() {
+        try {
+            const data = await knex('messages')
+            return data
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    async deleteAll() {
+        try {
+            await knex('messages').del()
+        } catch (err) {
+            console.log(err)
         }
     }
 }

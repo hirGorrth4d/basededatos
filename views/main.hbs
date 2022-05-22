@@ -1,52 +1,82 @@
-<form onsubmit="return addProducto()">
-    <h1>Carga tu producto</h1>
-    <!-- <input type="text" placeholder="producto" id="producto">
-        <input type="text" placeholder="precio" id="precio">
-        <input type="submit" value="Enviar"> -->
-
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Producto</label>
-        <input type="text" placeholder="producto" id="producto">
-    </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Precio</label>
-        <input type="text" placeholder="precio" id="precio">
-    </div>
-    <input type="submit" value="Enviar">
-
-
-</form>
-<!-- <div id="tablaProd"></div> -->
-<h1>Productos</h1>
-
-<table class="table table-dark">
-    <thead>
-        <tr>
-            <th scope="col">Producto</th>
-            <th scope="col">Precio</th>
-        </tr>
-    <tbody id="tablaProd"></tbody>
-    </thead>
-</table>
-
-<!-- <form onsubmit="return addMensajes()">
-        <h1>Chat</h1>
-        <input type="text" placeholder="email" id="mail">
-        <input type="text" placeholder="msn" id="mensaje">
+    {{!-- <form onsubmit="return addProducto()" id="form"> --}}
+    <form id="form">
+        <h1>Carga tu producto</h1>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Producto</label>
+            <input type="text" placeholder="producto" id="title">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Precio</label>
+            <input type="text" placeholder="precio" id="price">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">stock</label>
+            <input type="text" placeholder="stock" id="stock">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">codigo</label>
+            <input type="text" placeholder="codigo" id="codigo">
+        </div>
         <input type="submit" value="Enviar">
     </form>
-    <div id="chat"></div> -->
+    <!-- <div id="tablaProd"></div> -->
+    <h1>Productos</h1>
+    <div>
+        {{#if productos}}
+        <table class="table table-dark" id="table">
+            <thead>
+                <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Codigo</th>
+                </tr>
+                {{#each productos}}
+                <tbody id="tablaProd">
+                    <tr>
+                    <td>{{this.title}}</td>
+                    <td>{{this.price}}</td>
+                    <td>{{this.stock}}</td>
+                    <td>{{this.codigo}}</td>
+                </tr>
+                </tbody>
+                {{/each}}
+            </thead>
+        </table>
+        {{else}}
+            <span>No hay productos</span>
+        {{/if}}
+    </div>
 
-<h1>Chat</h1>
-<form onsubmit="return addMensajes()">
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email</label>
-        <input type="text" placeholder="email" id="mail">
+    <h1>Chat</h1>
+    {{!-- <form onsubmit="return addMensajes()" id="messages"> --}}
+    <form id="messages">
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">email</label>
+            <input type="text" placeholder="email" id="email">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Mensaje</label>
+            <input type="text" placeholder="msn" id="message">
+        </div>
+        <input type="submit" value="Enviar">
+    </form>
+    <div id="errors">
+        
     </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Mensaje</label>
-        <input type="text" placeholder="msn" id="mensaje">
+
+    <div id="chat">
+        {{#if messages}}
+		
+			{{#each messages}}
+				<li>
+					<span style="color: blue; font-weight: 600;">{{this.email}}: </span>
+					<span style="color: brown;">[{{this.date}}]</span>
+					<span style="color: green; font-style: italic;">{{this.message}}</span>
+				</li>
+			{{/each}}
+		{{else}}
+			<span>No hay mensajes</span>
+		{{/if}}
     </div>
-    <input type="submit" value="Enviar">
-</form>
-<div id="chat"></div>
+

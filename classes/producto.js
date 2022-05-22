@@ -2,57 +2,47 @@ const { productOptions } = require('../options/options')
 const knex = require('knex')(productOptions)
 
 class Producto {
-    constructor (db, table) {
-        this.save = (product) => {
-            db.schema.hasTable(table).then((exists) => {
-                if (!exists) {
-                    return db.schema.createTable(table, (t) => {
-                        t.increments('id').primary()
-                        t.string('name', 50)
-                        t.integer('precio')
-                    })
-                }
+    async addProduct(newData) {
+        try {
+            await knex('products').insert({
+                title: newData.title,
+                price: newData.price,
+                stock: newData.stock,
+                codigo: newData.codigo
             })
-            db(table).insert(product)
-            .then(()=>console.log('producto agregado'))
-            .catch((err) => {
-                console.log(err)
-                throw err
-            })
-        }
-        this.getAll = async() => {
-            const product = await db.from(table)
-            .select('*')
-            .then((rows) => rows)
-            return product
-        }
-    }
-    guardarProducto(producto) {
-        knex('articulos').insert(producto)
-        .then(art => art)
-        .catch ((err) => {
+        } catch (err) {
             console.log(err)
-            throw err
-        }).finally(()=>{
-            knex.destroy()
-        })
+        }
     }
-    obtenerProducto() {
-        knex('articulos').select('*')
-        .then(rows=> rows)
-        .catch((err) => {
-            console.log(err) 
-            throw err
-            }
-        ).finally(()=>{
-            knex.destroy()
-        })
+    async getById(id) {
+        try {
+            const product = await knex('products').where({id})
+
+            return product
+        } catch (err) {
+            console.log(err)
+        }
     }
-    agregarProducto = (req,res) => {
-        let producto  = req.body
-        this.guardarProducto(producto)
-        console.log('producto agregado')
-        res.redirect('/')
+    async update(id, data) {
+        try {
+            return await knex('products').where({id}).update(
+                {
+                    title: data.title,
+                    price: data.price,
+                    stock: data.stock,
+                    codigo: data.codigo
+                },
+                '*'
+            )
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    async getAll() {
+        return await knex('products')
+    }
+    async deleteById(id) {
+        await knex('products').where({id}).del()
     }
     
 }
