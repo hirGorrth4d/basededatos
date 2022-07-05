@@ -3,6 +3,7 @@ const { engine } = require('express-handlebars')
 const app = express ()
 const http = require ("http")
 const server = http.createServer(app)
+const {faker} = require("@faker-js/faker")
 
 const port = process.env.PORT || 8080
 const {Server} = require("socket.io")
@@ -29,13 +30,34 @@ const messageApi = new Mensajes()
 
 const productApi = new Producto()
 
+let productTest = []
+
+const createFakes = (cant = 5 ) => {
+    for (let i = 0; i <= cant; i++) {
+        productTest.push({
+            name: faker.commerce.productName(),
+            price: faker.commerce.price(),
+            foto: faker.image.avatar()
+        })
+    }
+}
 
 app.get('/', (req,res) => {
     const productos =  productApi.getAll()
     let messages =  messageApi.getAll()
     res.render('main', {title: 'Productos', productos, messages})
 })
+//fake productos api
+app.get('/productos-test', (req,res)=>{
+    res.send({data: productTest})
+})
 
+app.post('/productos-test', (req,res) => {
+    createFakes(req.query.cant)
+    res.send('data creada')
+})
+
+//mensajes websocket
 io.on("connection", (socket) =>{
     //productos
     socket.emit("producto", productApi)
