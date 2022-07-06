@@ -17,7 +17,6 @@ const chatOptions = {
     useNullAsDefault: true
 }
 
-
 module.exports = {
     productOptions,
     chatOptions

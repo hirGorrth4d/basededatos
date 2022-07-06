@@ -27,8 +27,11 @@ app.use(express.urlencoded({extended: true}))
 
 
 const messageApi = new Mensajes()
-
+let chat_db = []
 const productApi = new Producto()
+
+
+// FAKER
 
 let productTest = []
 
@@ -57,6 +60,16 @@ app.post('/productos-test', (req,res) => {
     res.send('data creada')
 })
 
+
+
+
+// Normalizer
+
+const normalizr = require('normalizr')
+const normalize = normalizr.normalize
+const denormalize = normalizr.denormalize
+const schema = normalizr.schema
+
 //mensajes websocket
 io.on("connection", (socket) =>{
     //productos
@@ -83,12 +96,25 @@ io.on("connection", (socket) =>{
             email: message.email,
             message: message.message,
             date: new Date().toLocaleDateString(),
+            edad: message.edad,
+            nombre: message.nombre
         }
         await messageApi.save(data)
+        chat_db.push(data)
 
         console.log(messageApi)
 
         io.sockets.emit("mensaje_chat", data)
+        // norm
+        const user = new schema.Entity('user', {}, {idAttribute: 'email'})
+        const chatSchema = new schema.Entity("author", {authour: user}, {idAttribute: 'email'})
+        
+        const normalizedData = normalize(chat_db, [chatSchema])
+        const denormalizeData = denormalize(chat_db, [chatSchema])
+
+
+        console.log(normalizedData);
+        console.log(denormalizeData);
     })
 })
 
