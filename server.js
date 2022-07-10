@@ -10,6 +10,8 @@ const {Server} = require("socket.io")
 const io = new Server(server)
 const Mensajes = require('./classes/mensajes')
 const Producto = require('./classes/producto')
+const chatDao = require('./daos/chatDao');
+const productDao = require('./daos/productDao');
 app.use(express.static(__dirname+"/public"))
 
 app.set('views', './views')
@@ -46,8 +48,8 @@ const createFakes = (cant = 5 ) => {
 }
 
 app.get('/', (req,res) => {
-    const productos =  productApi.getAll()
-    let messages =  messageApi.getAll()
+    const productos =  productDao.getAll()
+    let messages =  chatDao.getAll()
     res.render('main', {title: 'Productos', productos, messages})
 })
 //fake productos api
@@ -73,19 +75,19 @@ const schema = normalizr.schema
 //mensajes websocket
 io.on("connection", (socket) =>{
     //productos
-    socket.emit("producto", productApi)
+    socket.emit("producto", productDao)
     socket.on("producto_respuesta", (data) =>{
         console.log(data)
     })
     socket.on("dataProdCliente", (product) =>{
-        productApi.addProduct(product)
-        console.log(productApi)
-        io.sockets.emit("update-products", productApi)
+        productDao.addProduct(product)
+        console.log(productDao)
+        io.sockets.emit("update-products", productDao)
     })
 
     //mensajes
     console.log("usuario conectado")
-    socket.emit("mensaje_chat", messageApi.getAll())
+    socket.emit("mensaje_chat", chatDao.getAll())
     socket.on("mensaje_respuesta", (data) =>{
         console.log(data)
     })
@@ -99,10 +101,10 @@ io.on("connection", (socket) =>{
             edad: message.edad,
             nombre: message.nombre
         }
-        await messageApi.save(data)
+        await chatDao.save(data)
         chat_db.push(data)
 
-        console.log(messageApi)
+        console.log(chatDao)
 
         io.sockets.emit("mensaje_chat", data)
         // norm
