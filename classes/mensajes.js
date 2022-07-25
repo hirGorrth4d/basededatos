@@ -8,6 +8,8 @@ class Mensajes {
                 email: newData.email,
                 message: newData.message,
                 date: newData.date,
+                edad: newData.edad,
+                nombre: newData.nombre
             })
         } catch (e) {
             console.log(e)

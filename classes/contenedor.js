@@ -3,7 +3,7 @@ const {mongoOptions, chat} = require('../options/options')
 
 class ContenedorMongo {
     constructor (conexion, db, coleccion) {
-        this.mongo = mongoOptions.connection
+        this.mongo = new MongoClient(mongoOptions.connection)
         this.db = mongoOptions.ecommerceCollection
         this.coleccion = mongoOptions.chatSchema
     }
